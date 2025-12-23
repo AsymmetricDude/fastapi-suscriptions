@@ -1,7 +1,7 @@
 from sqlmodel import SQLModel, Field, Relationship
 from typing import List
 from .customers import Customer
-from .customer_plans import CustomerPlan
+from .customer_plans import CustomerPlan, StatusEnum
 
 class Plan(SQLModel, table=True):
     id: int | None = Field(primary_key=True)        

@@ -1,14 +1,21 @@
 from sqlmodel import SQLModel, Field, Relationship
 from typing import List
-
+from pydantic.networks import EmailStr
 from .customer_plans import CustomerPlan
+from pydantic import field_validator
 
 class CustomerBase(SQLModel):
     name: str = Field(default=None)
     description: str | None = Field(default=None)
-    email: str = Field(default=None)
+    email: EmailStr = Field(default=None, unique=True)
     age: int = Field(default=None)
 
+    @field_validator("age")
+    def validate_age(cls, v):
+        if v < 18:
+            raise ValueError("Invalid age")
+        return v
+        
 
 class CustomerCreate(CustomerBase):
     pass
