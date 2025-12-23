@@ -15,3 +15,9 @@ def create_plan(plan_data: Plan, session: SessionDep, status_code=status.HTTP_20
     session.commit()
     session.refresh(plan_db)
     return plan_db
+
+@router.get("/plans", response_model=list[Plan])
+def get_plans(session: SessionDep):
+    plans = session.exec(select(Plan)).all()
+    return plans
+
