@@ -8,8 +8,8 @@ from ..models.customers import Customer
 
 router = APIRouter(tags=["transactions"])
 
-@router.post("/transactions")
-async def create_transation(transaction_data: TransactionCreate, session: SessionDep, status_code=status.HTTP_201_CREATED):
+@router.post("/transactions", status_code=status.HTTP_201_CREATED)
+async def create_transation(transaction_data: TransactionCreate, session: SessionDep):
     transaction_data_dict = transaction_data.model_dump()
     customer = session.get(Customer, transaction_data_dict.get('customer_id'))
     if not customer:

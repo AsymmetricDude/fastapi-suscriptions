@@ -4,7 +4,7 @@ from .customers import Customer
 from .customer_plans import CustomerPlan, StatusEnum
 
 class Plan(SQLModel, table=True):
-    id: int | None = Field(primary_key=True)        
+    id: int | None = Field(default=None, primary_key=True)        
     name: str = Field(default=None)
     price: int = Field(default=None)
     description: str = Field(default=None)
