@@ -1,9 +1,13 @@
 import zoneinfo
 from datetime import datetime
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, Request, Depends, status
 from .db import create_all_tables
 from .routers import customers, transactions, invoices, plans
 import time
+from fastapi.security import HTTPBasic, HTTPBasicCredentials
+from fastapi import HTTPException
+
+security = HTTPBasic()
 
 app = FastAPI(lifespan=create_all_tables)
 app.include_router(customers.router)
@@ -27,8 +31,11 @@ async def log_headers(request: Request, call_next):
     return response
 
 @app.get("/")
-async def root():
-    return {"message": "Hola, Luis!"}
+async def root(credentials: HTTPBasicCredentials = Depends(security)):
+    print(credentials)
+    if credentials.username != "julian.murillo" or credentials.password != "test":
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Unauthorized")
+    return {"message": f"Hola, {credentials.username}!"}
 
 
 country_timezones = {
